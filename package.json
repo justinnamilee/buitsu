@@ -21,6 +21,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "passport-google-oauth2": "^0.2.0",
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.4",
+    "yaml": "^2.2.1"
   }
 }

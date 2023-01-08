@@ -1,0 +1,6 @@
+---
+database:
+  path: "./private/buitsu.db"
+  ui:
+    open: "DB already opened."
+    error: "Unable to open DB: "
