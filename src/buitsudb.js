@@ -3,35 +3,33 @@ import sqlite3 from 'sqlite3';
 export default class buitsudb {
   config;
   db;
-  state = false;
+  opened = false;
 
   constructor(config) {
     this.config = config;
   }
 
   open() {
-    if (this.state) {
-      console.warn(this.config.ui.open);
-    }
-    else {
-      this.db = new sqlite3.Database(
-        this.config.path,
-        (err) => {
-          if (err) {
-            console.error(this.config.ui.error + err.message);
-          }
-          else {
-            this.state = true;
-          }
-        });
+    if (!this.opened) {
+      this.db = new sqlite3.Database(this.config.path);
+      this.opened = true;
     }
   }
 
   close() {
     this.db.close();
+    this.opened = false;
   }
 
   setup() {
-    console.log("hi");
+    this.open();
+    this.db.run(this.config.query.setup);
+    this.close();
+  }
+
+  run(query) {
+    this.open();
+    this.db.run(query);
+    this.close();
   }
 }
