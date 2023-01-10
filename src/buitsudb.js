@@ -1,35 +1,88 @@
 import sqlite3 from 'sqlite3';
 
 export default class buitsudb {
-  config;
+  c;
   db;
   opened = false;
 
   constructor(config) {
-    this.config = config;
+    this.c = config;
   }
 
+
+  //! open & shut case
   open() {
-    if (!this.opened) {
-      this.db = new sqlite3.Database(this.config.path);
+    if (this.opened) {
+      console.warn(this.c.ui.opened);
+    }
+    else {
+      this.db = new sqlite3.Database(this.c.path);
       this.opened = true;
+      console.log(this.c.ui.open);
     }
   }
 
   close() {
-    this.db.close();
-    this.opened = false;
+    if (this.opened) {
+      this.db.close();
+      this.opened = false;
+      console.log(this.c.ui.close);
+    }
+    else {
+      console.log(this.c.ui.closed);
+    }
   }
 
+
+  //! setup adds tables if required
   setup() {
-    this.open();
-    this.db.run(this.config.query.setup);
-    this.close();
+    this.db.serialize(() => {
+      this.db.run(this.c.query.setup.user);
+      this.db.run(this.c.query.setup.index);
+      this.db.run(this.c.query.setup.game);
+      this.db.run(this.c.query.setup.score);
+    });
+
+    console.log(this.c.ui.setup);
   }
 
-  run(query) {
-    this.open();
-    this.db.run(query);
-    this.close();
+
+  //! user shit
+  find(user, cb, calls) {
+    if (typeof calls === "undefined" || calls < 5) {
+      this.db.get(
+        this.c.query.user.find,
+        [user.id],
+        (err, row) => {
+          if (err) {
+            cb(err, null);
+          }
+          else {
+            if (typeof row !== "undefined") {
+              console.log(this.c.ui.find + row.rowid);
+              cb(null, row.rowid);
+            }
+            else {
+              this.db.run(
+                this.c.query.user.create,
+                [user.displayName, user.id, user.emails[0].value],
+                (err) => {
+                  if (err) {
+                    cb(err, null);
+                  }
+                  else {
+                    console.log(this.c.ui.create);
+                    this.find(user, cb, calls ? (calls + 1) : 1);
+                  }
+                });
+            }
+          }
+        });
+    }
+    else {
+      console.error(this.c.ui.recursion);
+      //! add error object
+      cb(null, null);
+    }
   }
 }
