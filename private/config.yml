@@ -3,6 +3,11 @@ database:
   path: "./private/buitsu.db"
   query:
     user:
+      create: >
+        INSERT INTO
+          user (name, id, email)
+        VALUES
+          (?, ?, ?)
       find: >
         SELECT
           rowid
@@ -10,11 +15,22 @@ database:
           user
         WHERE
           id = ?
-      create: >
-        INSERT INTO
-          user (name, id, email)
-        VALUES
-          (?, ?, ?)
+      info: >
+        SELECT
+          *
+        FROM
+          user
+        WHERE
+          rowid = ?
+      update: >
+        UPDATE
+          user
+        SET
+          name = ?
+          email = ?
+          display = ?
+        WHERE
+          rowid = ?
     setup:
       game: >
         CREATE TABLE IF NOT EXISTS game
