@@ -73,7 +73,10 @@ database:
     setup: "DB setup complete."
 express:
   grace: 30
+  passport:
+    googleCallbackUrl: "https://v2.taiz.me/login/return"
   port: 3111
+  route: "lol"
   startup: 2
   static: public
   ui:
@@ -81,5 +84,3 @@ express:
     shutdownFail: "Server terminated abnormally."
     shutdownSuccess: "Server terminated successfull."
     startup: "Server open, port: "
-passport:
-  googleCallbackUrl: "https://v2.taiz.me/login/return"
