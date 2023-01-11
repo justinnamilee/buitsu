@@ -3,6 +3,7 @@ import sqlite3 from 'sqlite3';
 export default class buitsudb {
   c;
   db;
+  path;
   opened = false;
 
   constructor(config) {
@@ -16,7 +17,8 @@ export default class buitsudb {
       console.warn(this.c.ui.opened);
     }
     else {
-      this.db = new sqlite3.Database(this.c.path);
+      this.path = process.env.database_path || this.c.path;
+      this.db = new sqlite3.Database(this.path);
       this.opened = true;
       console.log(this.c.ui.open);
     }
@@ -29,7 +31,7 @@ export default class buitsudb {
       console.log(this.c.ui.close);
     }
     else {
-      console.log(this.c.ui.closed);
+      console.warn(this.c.ui.closed);
     }
   }
 
@@ -48,7 +50,7 @@ export default class buitsudb {
 
 
   //! user shit
-  find(user, cb, calls) {
+  userFind(user, cb, calls) {
     if (typeof calls === "undefined" || calls < 5) {
       this.db.get(
         this.c.query.user.find,
@@ -57,32 +59,45 @@ export default class buitsudb {
           if (err) {
             cb(err, null);
           }
+          else if (typeof row === "undefined") {
+            this.db.run(
+              this.c.query.user.create,
+              [user.displayName, user.id, user.emails[0].value],
+              (err) => {
+                if (err) {
+                  cb(err, null);
+                }
+                else {
+                  console.log(this.c.ui.create);
+                  this.userFind(user, cb, calls ? (calls + 1) : 1);
+                }
+              });
+          }
           else {
-            if (typeof row !== "undefined") {
-              console.log(this.c.ui.find + row.rowid);
-              cb(null, row.rowid);
-            }
-            else {
-              this.db.run(
-                this.c.query.user.create,
-                [user.displayName, user.id, user.emails[0].value],
-                (err) => {
-                  if (err) {
-                    cb(err, null);
-                  }
-                  else {
-                    console.log(this.c.ui.create);
-                    this.find(user, cb, calls ? (calls + 1) : 1);
-                  }
-                });
-            }
+            console.log(this.c.ui.find + row.rowid);
+            cb(null, row.rowid);
           }
         });
     }
     else {
       console.error(this.c.ui.recursion);
-      //! add error object
+      //TODO add error object
       cb(null, null);
     }
+  }
+
+  userUpdate(user, data, cb) {
+    this.db.get(
+      this.c.query.user.info,
+      [user],
+      (err, row) => {
+        if (err) {
+          cb(err, null);
+        }
+        else if (typeof row !== "undefined") {
+
+        }
+      }
+    )
   }
 }

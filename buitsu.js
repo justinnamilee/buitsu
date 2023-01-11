@@ -19,7 +19,7 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const __config = path.join(__dirname, (process.env.config || 'private/config.yml'));
+const __config = path.join(__dirname, (process.env.buitsu_config || 'private/config.yml'));
 
 if (!fs.existsSync(__config)) {
   console.error(`Config '${__config}' must exist!`);
@@ -36,15 +36,15 @@ db.open();
 db.setup();
 
 //! passport
-passport.serializeUser((user, cb) => { db.find(user, cb) }); //? save to session
+passport.serializeUser((user, cb) => { db.userFind(user, cb) }); //? save to session
 passport.deserializeUser((user, cb) => { cb(null, user) }); //? retrieve for request
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.id,
-      clientSecret: process.env.secret,
-      callbackURL: c.passport.callbackUrl,
+      clientID: process.env.google_id,
+      clientSecret: process.env.google_secret,
+      callbackURL: (process.env.google_callbackurl || c.passport.googleCallbackUrl),
       passReqToCallback: true
     },
     (request, accessToken, refreshToken, user, done) => {
@@ -54,8 +54,11 @@ passport.use(
 
 //! express
 const app = express();
-const port = process.env.port || c.express.port || 3111;
+const port = process.env.express_port || c.express.port;
 let running = false;
+
+app.set('view engine', 'ejs');
+app.use(express.static(process.env.express_static || c.express.static));
 
 app.use(
   //? handle safe shutdown
@@ -68,7 +71,7 @@ app.use(
     res.send(503, c.express.ui.shutdown);
   });
 
-app.use(expressSession({ secret: process.env.session, resave: false, saveUninitialized: true, proxy: true }));
+app.use(expressSession({ secret: process.env.express_session_secret, resave: false, saveUninitialized: true, proxy: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -85,7 +88,7 @@ const server = app.listen(
     () => {
       running = true; console.log(c.express.ui.startup + port)
     },
-    c.express.startup * 1000));
+    (process.env.express_startup || c.express.startup) * 1000));
 
 
 //! cleanup
@@ -106,7 +109,7 @@ function shutdown() {
       console.log(c.express.ui.shutdownFail);
       process.exit(1);
     },
-    (process.env.grace || c.express.grace) * 1000);
+    (process.env.express_grace || c.express.grace) * 1000);
 }
 
 process.on('SIGINT', shutdown);

@@ -75,10 +75,11 @@ express:
   grace: 30
   port: 3111
   startup: 2
+  static: public
   ui:
     shutdown: "Server terminating..."
     shutdownFail: "Server terminated abnormally."
     shutdownSuccess: "Server terminated successfull."
     startup: "Server open, port: "
 passport:
-  callbackUrl: "https://v2.taiz.me/login/return"
+  googleCallbackUrl: "https://v2.taiz.me/login/return"
