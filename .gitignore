@@ -104,7 +104,6 @@ dist
 .tern-port
 
 # project specific
-private/config.yml
 private/buitsu.db
 
 # PM2
