@@ -54,7 +54,7 @@ export default class buitsudb {
     if (typeof calls === "undefined" || calls < 5) {
       this.db.get(
         this.c.query.user.find,
-        [user.id],
+        this.mapParams('find', user),
         (err, row) => {
           if (err) {
             cb(err, null);
@@ -62,7 +62,7 @@ export default class buitsudb {
           else if (typeof row === "undefined") {
             this.db.run(
               this.c.query.user.create,
-              [user.displayName, user.id, user.emails[0].value],
+              this.mapParams('create', user),
               (err) => {
                 if (err) {
                   cb(err, null);
@@ -75,29 +75,39 @@ export default class buitsudb {
           }
           else {
             console.log(this.c.ui.find + row.rowid);
-            cb(null, row.rowid);
+            cb(null, { ...user, rowid: row.rowid });
           }
         });
     }
     else {
-      console.error(this.c.ui.recursion);
+      console.error(this.c.ui.recursionFail);
       //TODO add error object
       cb(null, null);
     }
   }
 
-  userUpdate(user, data, cb) {
-    this.db.get(
-      this.c.query.user.info,
-      [user],
-      (err, row) => {
+  userUpdate(user) {
+    this.db.run(
+      this.c.query.user.update,
+      this.mapParams('update', user),
+      (err) => {
         if (err) {
-          cb(err, null);
+          console.error(c.ui.updateFail + err.message);
         }
-        else if (typeof row !== "undefined") {
+        else {
+          console.log(c.ui.updateSuccess);
+        }
+      });
+  }
 
-        }
-      }
-    )
+  //! map data objects by query
+  mapParams(query, data) {
+    const param = new Array(this.c.map[query].length);
+
+    for (const [i, p] of this.c.map[query].entries()) {
+      param[i] = data[p];
+    }
+
+    return param;
   }
 }

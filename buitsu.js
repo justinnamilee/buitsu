@@ -34,6 +34,7 @@ db.setup();
 
 //! open express!
 const server = new buitsuexpress(c.express, db);
+server.open();
 
 
 //! cleanup
@@ -41,18 +42,7 @@ function shutdown() {
   //? make sure we treat the DB nicely... >_>
   db.close();
 
-  server.close(
-    () => {
-      console.log(c.express.ui.shutdownSuccess);
-      process.exit(0);
-    });
-
-  setTimeout(
-    () => {
-      console.log(c.express.ui.shutdownFail);
-      process.exit(1);
-    },
-    (process.env.express_grace || c.express.grace) * 1000);
+  server.close(() => process.exit(1), () => process.exit(0));
 }
 
 process.on('SIGINT', shutdown);

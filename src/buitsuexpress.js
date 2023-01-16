@@ -3,18 +3,43 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import expressSession from 'express-session';
 
+// passport normalizing function(s)
+function normalizeGObject(input) {
+  //? Google
+  const output = {};
+
+  output.name = input.displayName;
+  output.id = input.id;
+  output.email = input.emails[0].value;
+
+  output.raw = input;
+  output.type = 'GObject';
+
+  return output;
+}
+
+function normalizeFObject(input) {
+  //? Facebook
+  const output = {};
+  //TODO add support for this guy eventually
+  return output;
+}
+
+
 export default class buitsuexpress {
+  app;
   c;
   db;
+  port;
   running = false;
   server;
 
   constructor(config, db) {
     this.c = config;
     this.db = db;
-  
+
     //! passport
-    passport.serializeUser((user, cb) => { this.db.userFind(user, cb) }); //? save to session
+    passport.serializeUser((user, cb) => { this.db.userFind(normalizeGObject(user), cb) }); //? save to session
     passport.deserializeUser((user, cb) => { cb(null, user) }); //? retrieve for request
 
     passport.use(
@@ -31,14 +56,13 @@ export default class buitsuexpress {
 
 
     //! express
-    const app = express();
-    const port = process.env.express_port || this.c.port;
-    let running = false;
+    this.app = express();
+    this.port = process.env.express_port || this.c.port;
 
-    app.set('view engine', 'ejs');
-    app.use(express.static(process.env.express_static || this.c.static));
+    this.app.set('view engine', 'ejs');
+    this.app.use(express.static(process.env.express_static || this.c.static));
 
-    app.use(
+    this.app.use(
       //? handle safe shutdown
       (req, res, next) => {
         if (this.running) {
@@ -49,28 +73,35 @@ export default class buitsuexpress {
         res.send(503, this.c.ui.shutdown);
       });
 
-    app.use(expressSession({ secret: process.env.express_session_secret, resave: false, saveUninitialized: true, proxy: true }));
-    app.use(passport.initialize());
-    app.use(passport.session());
+    this.app.use(expressSession({ secret: process.env.express_session_secret, resave: false, saveUninitialized: true, proxy: true }));
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
 
-    app.get("/", (req, res) => { res.json({ message: "Whatchu want?" }) });
-    app.get("/failed", (req, res) => { res.json({ message: "Failed to log in." }) });
-    app.get("/success", (req, res, next) => { if (req.user) { next() } else { res.sendStatus(401) } }, (req, res) => { res.json({ message: "Successfully logged in.", user: req.user }) });
+    this.app.get("/", (req, res) => { res.json({ message: "Whatchu want?" }) });
+    this.app.get("/failed", (req, res) => { res.json({ message: "Failed to log in." }) });
+    this.app.get("/success", (req, res, next) => { if (req.user) { next() } else { res.sendStatus(401) } }, (req, res) => { res.json({ message: "Successfully logged in.", user: req.user }) });
 
-    app.get("/login", passport.authenticate("google", { scope: ["email", "profile"] }));
-    app.get("/login/return", passport.authenticate("google", { failureRedirect: "/failed", successRedirect: "/success" }));
+    this.app.get("/login", passport.authenticate("google", { scope: ["email", "profile"] }));
+    this.app.get("/login/return", passport.authenticate("google", { failureRedirect: "/failed", successRedirect: "/success" }));
+  }
 
-    this.server = app.listen(
-      port,
+  open() {
+    this.server = this.app.listen(
+      this.port,
       setTimeout(
         () => {
-          this.running = true; console.log(this.c.ui.startup + port)
+          this.running = true; console.log(this.c.ui.startup + this.port)
         },
         (process.env.express_startup || this.c.startup) * 1000));
   }
 
-  close(cb) {
+  close(err, done) {
     this.running = false;
-    this.server.close(cb);
+
+    this.server.close(() => { console.log(c.ui.shutdownSuccess); done() });
+
+    setTimeout(
+      () => { console.log(this.c.ui.shutdownFail); err() },
+      (process.env.express_grace || this.c.grace) * 1000);
   }
 }

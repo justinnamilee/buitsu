@@ -1,5 +1,17 @@
 ---
 database:
+  map:
+    create:
+      - name
+      - id
+      - email
+    find:
+      - id
+    info:
+      - rowid
+    update:
+      - display
+      - rowid
   path: "./private/buitsu.db"
   query:
     user:
@@ -26,8 +38,6 @@ database:
         UPDATE
           user
         SET
-          name = ?
-          email = ?
           display = ?
         WHERE
           rowid = ?
@@ -69,8 +79,10 @@ database:
     find: "Found user: "
     open: "DB opened."
     opened: "DB already opened."
-    recursion: "Max recursion reached."
+    recursionFail: "Max recursion reached."
     setup: "DB setup complete."
+    updateFail: "Failed to update user: "
+    updateSuccess: "Updated user."
 express:
   grace: 30
   passport:
