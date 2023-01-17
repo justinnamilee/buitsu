@@ -89,6 +89,9 @@ express:
   route:
     about: "/about"
     loginFailed: "/login/failed"
+    loginFacebook: "/login/facebook"
+    loginFacebookCallback: "/login/facebook/return"
+    loginFacebookCallbackUrl: "https://v2.taiz.me/login/facebook/return"
     loginGoogle: "/login/google"
     loginGoogleCallback: "/login/google/return"
     loginGoogleCallbackUrl: "https://v2.taiz.me/login/google/return"
@@ -98,6 +101,7 @@ express:
   static: public
   ui:
     loginFailed: "Failed to log in with selected OAuth2.0 method, this shouldn't happen."
+    normalizeFailed: "Failed to normalize object: "
     shutdown: "Server terminating..."
     shutdownFail: "Server terminated abnormally."
     shutdownSuccess: "Server terminated successfull."
