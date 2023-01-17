@@ -77,12 +77,12 @@ export default class buitsuexpress {
     this.app.use(passport.initialize());
     this.app.use(passport.session());
 
-    this.app.get("/", (req, res) => { res.json({ message: "Whatchu want?" }) });
+    this.app.get("/", (req, res) => { res.render('pages/index', { data: req.user }) });
     this.app.get("/failed", (req, res) => { res.json({ message: "Failed to log in." }) });
     this.app.get("/success", (req, res, next) => { if (req.user) { next() } else { res.sendStatus(401) } }, (req, res) => { res.json({ message: "Successfully logged in.", user: req.user }) });
 
     this.app.get("/login", passport.authenticate("google", { scope: ["email", "profile"] }));
-    this.app.get("/login/return", passport.authenticate("google", { failureRedirect: "/failed", successRedirect: "/success" }));
+    this.app.get("/login/return", passport.authenticate("google", { failureRedirect: "/failed", successRedirect: "/" }));
   }
 
   open() {
