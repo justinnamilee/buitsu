@@ -1,4 +1,4 @@
-import sqlite3 from 'sqlite3';
+import sqlite3 from "sqlite3";
 
 export default class buitsudb {
   c;
@@ -54,7 +54,7 @@ export default class buitsudb {
     if (typeof calls === "undefined" || calls < 5) {
       this.db.get(
         this.c.query.user.find,
-        this.mapParams('find', user),
+        this.mapParams("find", user),
         (err, row) => {
           if (err) {
             cb(err, null);
@@ -62,7 +62,7 @@ export default class buitsudb {
           else if (typeof row === "undefined") {
             this.db.run(
               this.c.query.user.create,
-              this.mapParams('create', user),
+              this.mapParams("create", user),
               (err) => {
                 if (err) {
                   cb(err, null);
@@ -89,7 +89,7 @@ export default class buitsudb {
   userUpdate(user) {
     this.db.run(
       this.c.query.user.update,
-      this.mapParams('update', user),
+      this.mapParams("update", user),
       (err) => {
         if (err) {
           console.error(c.ui.updateFail + err.message);

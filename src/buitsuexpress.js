@@ -1,7 +1,7 @@
-import express from 'express';
-import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import expressSession from 'express-session';
+import express from "express";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import expressSession from "express-session";
 
 // passport normalizing function(s)
 function normalizeGObject(input) {
@@ -13,7 +13,7 @@ function normalizeGObject(input) {
   output.email = input.emails[0].value;
 
   output.raw = input;
-  output.type = 'GObject';
+  output.type = "GObject";
 
   return output;
 }
@@ -47,7 +47,7 @@ export default class buitsuexpress {
         {
           clientID: process.env.google_id,
           clientSecret: process.env.google_secret,
-          callbackURL: (process.env.google_callbackurl || this.c.passport.googleCallbackUrl),
+          callbackURL: this.c.route.loginGoogleCallbackUrl,
           passReqToCallback: true
         },
         (request, accessToken, refreshToken, user, done) => {
@@ -59,7 +59,7 @@ export default class buitsuexpress {
     this.app = express();
     this.port = process.env.express_port || this.c.port;
 
-    this.app.set('view engine', 'ejs');
+    this.app.set("view engine", "ejs");
     this.app.use(express.static(process.env.express_static || this.c.static));
 
     this.app.use(
@@ -69,7 +69,7 @@ export default class buitsuexpress {
           return next();
         }
 
-        res.setHeader('Connection', 'close');
+        res.setHeader("Connection", "close");
         res.send(503, this.c.ui.shutdown);
       });
 
@@ -77,12 +77,19 @@ export default class buitsuexpress {
     this.app.use(passport.initialize());
     this.app.use(passport.session());
 
-    this.app.get("/", (req, res) => { res.render('pages/index', { data: req.user }) });
-    this.app.get("/failed", (req, res) => { res.json({ message: "Failed to log in." }) });
-    this.app.get("/success", (req, res, next) => { if (req.user) { next() } else { res.sendStatus(401) } }, (req, res) => { res.json({ message: "Successfully logged in.", user: req.user }) });
+    // the basics
+    this.app.get(this.c.route.root, (req, res) => { res.render("pages/index", { data: req.user }) });
+    this.app.get(this.c.route.about, (req, res) => { res.render("pages/about", { data: req.user }) });
+    //this.app.get("/success", (req, res, next) => { if (req.user) { next() } else { res.sendStatus(401) } }, (req, res) => { res.json({ message: "Successfully logged in.", user: req.user }) });
 
-    this.app.get("/login", passport.authenticate("google", { scope: ["email", "profile"] }));
-    this.app.get("/login/return", passport.authenticate("google", { failureRedirect: "/failed", successRedirect: "/" }));
+    // login methods
+    this.app.post(this.c.route.logout, (req, res, next) => req.logout((err) => { if (err) { return next(err) } res.redirect("/") }));
+    this.app.get(this.c.route.loginFailed, (req, res) => { res.json({ message: this.c.ui.loginFailed }) });
+
+    this.app.get(this.c.route.loginGoogle, passport.authenticate("google", { scope: ["email", "profile"] }));
+    this.app.get(this.c.route.loginGoogleCallback, passport.authenticate("google", { failureRedirect: this.c.route.loginFailed, successRedirect: this.c.route.root }));
+
+    // games!!
   }
 
   open() {

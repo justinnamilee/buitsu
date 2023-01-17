@@ -85,13 +85,19 @@ database:
     updateSuccess: "Updated user."
 express:
   grace: 30
-  passport:
-    googleCallbackUrl: "https://v2.taiz.me/login/return"
   port: 3111
-  route: "lol"
+  route:
+    about: "/about"
+    loginFailed: "/login/failed"
+    loginGoogle: "/login/google"
+    loginGoogleCallback: "/login/google/return"
+    loginGoogleCallbackUrl: "https://v2.taiz.me/login/google/return"
+    logout: "/logout"
+    root: "/"
   startup: 2
   static: public
   ui:
+    loginFailed: "Failed to log in with selected OAuth2.0 method, this shouldn't happen."
     shutdown: "Server terminating..."
     shutdownFail: "Server terminated abnormally."
     shutdownSuccess: "Server terminated successfull."
