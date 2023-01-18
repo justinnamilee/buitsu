@@ -2,8 +2,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="keywords" content="japanese,game">
 <meta name="description" content="ブイツ.js - Japanese Flash Card Game">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+<link rel="stylesheet" href="<%- meta.css.bootstrap.href %>">
+<link rel="stylesheet" href="<%- meta.css.fontawesome.href %>" integrity="<%- meta.css.fontawesome.integrity %>" crossorigin="anonymous">
 <style>
   body {
     background-color: #c8c8ff;
@@ -12,7 +12,7 @@
 </style>
 <% if (data) { %>
 <script type="text/javascript">
-  const logoutUrl = "https://v2.taiz.me/logout"; //TODO set via ejs
+  const logoutUrl = "<%- meta.logoutUrl %>";
 
   function logout() {
     const xhr = new XMLHttpRequest();

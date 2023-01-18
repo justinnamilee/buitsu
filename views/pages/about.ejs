@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <%- include("../inc/head", { page: "about" }); %>
+  <%- include("../inc/head", { page: "about", data: data, meta: meta }); %>
 </head>
 
 <body class="container">
@@ -20,7 +20,7 @@
   </main>
 
   <footer>
-    <%- include("../inc/foot"); %>
+    <%- include("../inc/foot", { data: data, meta: meta }); %>
   </footer>
 
 </body>

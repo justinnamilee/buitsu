@@ -119,11 +119,11 @@ export default class buitsuexpress {
     // the basics
     this.app.get(
       this.c.route.root,
-      (req, res) => { res.render("pages/index", { data: req.user }) });
+      (req, res) => { res.render("pages/index", { data: req.user, meta: this.meta() }) });
 
     this.app.get(
       this.c.route.about,
-      (req, res) => { res.render("pages/about", { data: req.user }) });
+      (req, res) => { res.render("pages/about", { data: req.user, meta: this.meta() }) });
 
     //this.app.get(
     //  "/success",
@@ -164,16 +164,6 @@ export default class buitsuexpress {
     // games!!
   }
 
-  open() {
-    this.server = this.app.listen(
-      this.port,
-      setTimeout(
-        () => {
-          this.running = true; console.log(this.c.ui.startup + this.port)
-        },
-        (process.env.express_startup || this.c.startup) * 1000));
-  }
-
   close(err, done) {
     this.running = false;
 
@@ -182,5 +172,22 @@ export default class buitsuexpress {
     setTimeout(
       () => { console.log(this.c.ui.shutdownFail); err() },
       (process.env.express_grace || this.c.grace) * 1000);
+  }
+
+  meta() {
+    return ({
+      logoutUrl: this.c.route.logout,
+      css: this.c.ejs.css
+    });
+  }
+
+  open() {
+    this.server = this.app.listen(
+      this.port,
+      setTimeout(
+        () => {
+          this.running = true; console.log(this.c.ui.startup + this.port)
+        },
+        (process.env.express_startup || this.c.startup) * 1000));
   }
 }

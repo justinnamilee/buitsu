@@ -84,6 +84,13 @@ database:
     updateFail: "Failed to update user: "
     updateSuccess: "Updated user."
 express:
+  ejs:
+    css:
+      bootstrap:
+        href: "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      fontawesome:
+        href: "https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+        integrity: "sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm"
   grace: 30
   port: 3111
   route:

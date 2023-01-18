@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <%- include("../inc/head", { page: "home", data: data }); %>
+  <%- include("../inc/head", { page: "home", data: data, meta: meta }); %>
 </head>
 
 <body class="container">
@@ -33,7 +33,7 @@
   </main>
 
   <footer>
-    <%- include("../inc/foot", data); %>
+    <%- include("../inc/foot", { data: data, meta: meta }); %>
   </footer>
 
 </body>
