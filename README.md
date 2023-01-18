@@ -7,7 +7,7 @@ Version two of my Japanese flash-card trainer.  Version one was written in the m
 Shows you characters which you identify, in various ways.
 
 # Why, tho?
-Mostly 4fun and to play around with OAuth2/SQLite with NodeJS+Express.
+Mostly 4fun and to play around with OAuth2/SQLite with NodeJS+Express+EJS.
 
 # How to do?
 - `git clone ...`
