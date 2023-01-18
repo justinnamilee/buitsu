@@ -1,4 +1,4 @@
-# buitsu
+# ヴィツ.js
 Version two of my Japanese flash-card trainer.  Version one was written in the mid-2000s for Android 1.0 on an HTC Dream (Nexus One).
 
 
