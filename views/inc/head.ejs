@@ -10,3 +10,26 @@
     padding-top: 5em;
   }
 </style>
+<% if (data) { %>
+<script type="text/javascript">
+  const logoutUrl = "https://v2.taiz.me/logout"; //TODO set via ejs
+
+  function logout() {
+    const xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        window.location.href = JSON.parse(xhr.response);
+      }
+    };
+
+    xhr.open("POST", logoutUrl, false);
+    xhr.send();
+  }
+
+  // webpages r stoopid
+  window.onload = () => {
+    document.getElementById("logout").addEventListener("click", logout, false);
+  }
+</script>
+<% } %>

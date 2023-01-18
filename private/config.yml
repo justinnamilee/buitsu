@@ -96,6 +96,7 @@ express:
     loginGoogleCallback: "/login/google/return"
     loginGoogleCallbackUrl: "https://v2.taiz.me/login/google/return"
     logout: "/logout"
+    logoutCallback: "/logout/return"
     root: "/"
   startup: 2
   static: public

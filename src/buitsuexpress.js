@@ -131,9 +131,13 @@ export default class buitsuexpress {
     //  (req, res) => { res.json({ message: "Successfully logged in.", user: req.user }) });
 
     // misc login methods
+    this.app.get(
+      this.c.route.logoutCallback,
+      (req, res) => res.redirect(this.c.route.root))
+
     this.app.post(
       this.c.route.logout,
-      (req, res, next) => req.logout((err) => { if (err) { return next(err) } res.redirect("/") }));
+      (req, res, next) => req.logout((err) => { if (err) { return next(err) } res.json(this.c.route.logoutCallback) }));
 
     this.app.get(
       this.c.route.loginFailed,

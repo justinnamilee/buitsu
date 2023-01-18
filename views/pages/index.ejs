@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <%- include("../inc/head", { page: "home" }); %>
+  <%- include("../inc/head", { page: "home", data: data }); %>
 </head>
 
 <body class="container">
@@ -16,8 +16,9 @@
       <p>
         Welcome to ブイツ.js,<% if (data) { %> <em><%= data.name %></em>,<% } %> here you can practice your ひらがな, カタカナ, and 漢字.  There are multiple styles of flashcard game to be had here, please peruse the game list above<% if (!data) { %> once logged in<% } %>.  Top scores are tracked in the database so you can always relive your high scores!
         <br>
-      </P>
-      <% if (!data) { %><p>
+      </p>
+      <% if (!data) { %>
+      <p>
         If you want to continue, please sign in using one of the methods below.
         <br>
       </p>
@@ -26,12 +27,13 @@
       </button>
       <button type="button" class="btn btn-outline-info" onclick="window.location.href='/login/facebook';">
         <i class="fab fa-facebook-f"></i> &nbsp;Sign in with Facebook
-      </button><% } %>
+      </button>
+      <% } %>
     </div>
   </main>
 
   <footer>
-    <%- include("../inc/foot"); %>
+    <%- include("../inc/foot", data); %>
   </footer>
 
 </body>
