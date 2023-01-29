@@ -1,20 +1,24 @@
 import express from "express";
 import passport from "passport";
+import fs from "fs";
+import path from "path";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import expressSession from "express-session";
 
+
 // passport normalizing function(s)
 function normalizeObject(input) {
-  //todo add exists for provider
-  switch (input.provider) {
-    case 'google':
-      return normalizeGObject(input);
-    case 'facebook':
-      return normalizeFObject(input);
-    default:
-      return null;
+  if (input && "provider" in input) {
+    switch (input.provider) {
+      case "google":
+        return normalizeGObject(input);
+      case "facebook":
+        return normalizeFObject(input);
+    }
   }
+
+  return null;
 }
 
 function normalizeGObject(input) {
@@ -75,7 +79,7 @@ export default class buitsuexpress {
         {
           clientID: process.env.google_id,
           clientSecret: process.env.google_secret,
-          callbackURL: this.c.route.loginGoogleCallbackUrl,
+          callbackURL: this.c.url.loginGoogleCallback,
         },
         (accessToken, refreshToken, user, done) => {
           return done(null, user);
@@ -87,7 +91,7 @@ export default class buitsuexpress {
           clientID: process.env.facebook_id,
           clientSecret: process.env.facebook_secret,
           profileFields: ["id", "email", "displayName"],
-          callbackURL: this.c.route.loginFacebookCallbackUrl
+          callbackURL: this.c.url.loginFacebookCallback
         },
         (accessToken, refreshToken, user, done) => {
           return done(null, user);
@@ -119,11 +123,11 @@ export default class buitsuexpress {
     // the basics
     this.app.get(
       this.c.route.root,
-      (req, res) => { res.render("pages/index", { data: req.user, meta: this.meta() }) });
+      (req, res) => { res.render(this.c.view.page.index, { data: req.user, meta: this.c }) });
 
     this.app.get(
       this.c.route.about,
-      (req, res) => { res.render("pages/about", { data: req.user, meta: this.meta() }) });
+      (req, res) => { res.render(this.c.view.page.about, { data: req.user, meta: this.c }) });
 
     //this.app.get(
     //  "/success",
@@ -162,6 +166,36 @@ export default class buitsuexpress {
       passport.authenticate("google", { failureRedirect: this.c.route.loginFailed, successRedirect: this.c.route.root }));
 
     // games!!
+    this.app.get(
+      this.c.route.games,
+      (req, res) => {
+        if (req.user) {
+          res.render(this.c.view.page.games, { data: req.user, meta: this.c });
+        }
+        else {
+          res.redirect(this.c.route.root);
+        }
+      });
+
+    this.app.get(
+      this.c.route.game,
+      (req, res) => {
+        if (req.user) {
+          if (process.env.DEBUG) {
+            console.log(req.params.name);
+          }
+
+          if (req.params && "name" in req.params && req.params.name in this.c.view.game) {
+            res.render(this.c.view.game[req.params.name], { data: req.user, meta: this.c });
+          }
+          else {
+            res.redirect(this.c.route.games);
+          }
+        }
+        else {
+          res.redirect(this.c.route.root);
+        }
+      });
   }
 
   close(err, done) {
@@ -172,13 +206,6 @@ export default class buitsuexpress {
     setTimeout(
       () => { console.log(this.c.ui.shutdownFail); err() },
       (process.env.express_grace || this.c.grace) * 1000);
-  }
-
-  meta() {
-    return ({
-      logoutUrl: this.c.route.logout,
-      css: this.c.ejs.css
-    });
   }
 
   open() {

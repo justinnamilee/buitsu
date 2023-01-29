@@ -2,13 +2,13 @@
 <html>
 
 <head>
-  <%- include("../inc/head", { page: "games" }); %>
+  <%- include("../inc/head", { page: "Games", data: data, meta: meta }); %>
 </head>
 
 <body class="container">
 
   <header>
-    <%- include("../inc/nav"); %>
+    <%- include("../inc/nav", { page: "Games", data: data, meta: meta }); %>
   </header>
 
   <main>
@@ -20,7 +20,7 @@
   </main>
 
   <footer>
-    <%- include("../inc/foot"); %>
+    <%- include("../inc/foot", { page: "Games", data: data, meta: meta }); %>
   </footer>
 
 </body>

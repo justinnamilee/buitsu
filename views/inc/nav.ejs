@@ -2,7 +2,12 @@
   <a class="navbar-brand" href="/">ヴィツ.js</a>
   <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-      <a class="nav-link" href="/about">About</a>
+      <a class="nav-link<% if (page === "About") { %> font-weight-bold<% } %>" href="<%- meta.route.about %>">About</a>
     </li>
+    <% if (data) {%>
+    <li class="nav-item">
+      <a class="nav-link<% if (page === "Games") { %> font-weight-bold<% } %>" href="<%- meta.route.games %>">Games</a>
+    </li>
+    <% } %>
   </ul>
 </nav>

@@ -95,13 +95,13 @@ express:
   port: 3111
   route:
     about: "/about"
+    game: "/game/:name"
+    games: "/games"
     loginFailed: "/login/failed"
     loginFacebook: "/login/facebook"
     loginFacebookCallback: "/login/facebook/return"
-    loginFacebookCallbackUrl: "https://v2.taiz.me/login/facebook/return"
     loginGoogle: "/login/google"
     loginGoogleCallback: "/login/google/return"
-    loginGoogleCallbackUrl: "https://v2.taiz.me/login/google/return"
     logout: "/logout"
     logoutCallback: "/logout/return"
     root: "/"
@@ -114,3 +114,13 @@ express:
     shutdownFail: "Server terminated abnormally."
     shutdownSuccess: "Server terminated successfull."
     startup: "Server open, port: "
+  url:
+    loginFacebookCallback: "https://v2.taiz.me/login/facebook/return"
+    loginGoogleCallback: "https://v2.taiz.me/login/google/return"
+  view:
+    page:
+      about: "page/about"
+      games: "page/games"
+      index: "page/index"
+    game:
+      test: "game/test"
