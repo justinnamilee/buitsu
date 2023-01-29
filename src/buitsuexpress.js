@@ -23,7 +23,7 @@ function normalizeObject(input) {
 
 function normalizeGObject(input) {
   //? Google special handler
-  if (process.env.DEBUG) {
+  if (process.env.debug) {
     console.log(input);
   }
 
@@ -41,7 +41,7 @@ function normalizeGObject(input) {
 
 function normalizeFObject(input) {
   //? Facebook special handler
-  if (process.env.DEBUG) {
+  if (process.env.debug) {
     console.log(input);
   }
 
@@ -181,12 +181,12 @@ export default class buitsuexpress {
       this.c.route.game,
       (req, res) => {
         if (req.user) {
-          if (process.env.DEBUG) {
+          if (process.env.debug) {
             console.log(req.params.name);
           }
 
           if (req.params && "name" in req.params && req.params.name in this.c.view.game) {
-            res.render(this.c.view.game[req.params.name], { data: req.user, meta: this.c });
+            res.render(this.c.view.game[req.params.name], { data: req.user, meta: this.c, game: req.params.name });
           }
           else {
             res.redirect(this.c.route.games);

@@ -96,6 +96,7 @@ express:
   route:
     about: "/about"
     game: "/game/:name"
+    gameRaw: "/game/"
     games: "/games"
     loginFailed: "/login/failed"
     loginFacebook: "/login/facebook"

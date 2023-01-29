@@ -2,25 +2,29 @@
 <html>
 
 <head>
-  <%- include("../inc/head", { page: "Games", data: data, meta: meta }); %>
+  <%- include("../inc/head", { page: "Games" , data: data, meta: meta }); %>
 </head>
 
 <body class="container">
 
   <header>
-    <%- include("../inc/nav", { page: "Games", data: data, meta: meta }); %>
+    <%- include("../inc/nav", { page: "Games" , data: data, meta: meta }); %>
   </header>
 
   <main>
-    <div class="jumbotron">
-      <p>
-        This is a games page.
-      </p>
+    <div class="d-flex flex-column text-center jumbotron">
+      <div class="list-group list-group-horizontal w-100 justify-content-center align-items-center">
+        <% for (g in meta.view.game) { %>
+        <button type="button" class="btn btn-outline-info list-group-item" onclick="window.location.href='<%- meta.route.gameRaw + g %>';">
+          <%- g %>
+        </button>
+        <% } %>
+      </div>
     </div>
   </main>
 
   <footer>
-    <%- include("../inc/foot", { page: "Games", data: data, meta: meta }); %>
+    <%- include("../inc/foot", { page: "Games" , data: data, meta: meta }); %>
   </footer>
 
 </body>
