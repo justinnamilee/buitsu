@@ -1,0 +1,42 @@
+/* and all I got was this stupid comment */
+.custom-box {
+  height: 40vh;
+  padding: 5%;
+}
+
+.combined-box {
+  height: 20vh;
+  padding: 2.5%;
+}
+
+.outer-box {
+  padding: 2%;
+}
+
+.playfield {
+  /* Complementary color to #c8c8ff */
+  background-color: #ffdbcc;
+}
+
+.box1-row {
+  height: 33.33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box3-row {
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box2-text {
+  font-size: 8vw;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <link rel="stylesheet" href="/css/game.css">
   <%- include("../inc/head", { page: "Game: " + game, data: data, meta: meta }); %>
 </head>
 
@@ -12,6 +13,76 @@
   </header>
 
   <main>
+    <div class="container playfield">
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <div class="outer-box">
+            <div class="row">
+              <div class="col-4">
+                <div class="bg-primary text-white custom-box">
+                  <div class="box1-row">
+                    <h4 class="text-center">SCORE</h4>
+                  </div>
+                  <div class="box1-row">
+                    <h4 class="text-center">TIME</h4>
+                  </div>
+                  <div class="box1-row">
+                    <h4 class="text-center">INFO</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="bg-secondary text-white custom-box">
+                  <div class="box2-text">
+                    Box 2
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="bg-info text-white custom-box">
+                  <div class="box3-row">
+                    <div class="row justify-content-center">
+                      <div class="col-12">
+                        <button class="btn btn-primary">Button 1</button>
+                        <button class="btn btn-primary">Button 2</button>
+                        <button class="btn btn-primary">Button 3</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="box3-row">
+                    <div class="row justify-content-center">
+                      <div class="col-12">
+                        <select class="form-control">
+                          <option value="option1">Option 1</option>
+                          <option value="option2">Option 2</option>
+                          <option value="option3">Option 3</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center">
+                      <div class="col-12">
+                        <select class="form-control">
+                          <option value="option1">Option 1</option>
+                          <option value="option2">Option 2</option>
+                          <option value="option3">Option 3</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-12">
+                <div class="bg-dark text-white combined-box">
+                  Combined Box
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <footer>
