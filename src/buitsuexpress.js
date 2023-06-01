@@ -185,7 +185,8 @@ export default class buitsuexpress {
             console.log(req.params.name);
           }
 
-          if (req.params && "name" in req.params) {
+          // make sure we have a game, and make sure it's in approved list
+          if (req.params && "name" in req.params && this.c.game.includes(req.params.name)) {
             res.render(this.c.view.page.game, { data: req.user, meta: this.c, game: req.params.name });
           }
           else {
