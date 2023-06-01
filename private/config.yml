@@ -99,6 +99,8 @@ express:
       jquery:
         href: "https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity: "sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+  game:
+    - flashcard1
   grace: 30
   port: 3111
   route:
@@ -131,5 +133,5 @@ express:
       about: "page/about"
       games: "page/games"
       index: "page/index"
-    game:
-      test: "game/test"
+      game:  "page/game"
+    

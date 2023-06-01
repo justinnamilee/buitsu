@@ -14,7 +14,8 @@
   <main>
     <div class="d-flex flex-column text-center jumbotron">
       <div class="list-group list-group-horizontal w-100 justify-content-center align-items-center">
-        <% for (g in meta.view.game) { %>
+        <% for (let gn in meta.game) { %>
+          <% const g = meta.game[gn]; %>
         <button type="button" class="btn btn-outline-info list-group-item" onclick="window.location.href='<%- meta.route.gameRaw + g %>';">
           <%- g %>
         </button>

@@ -1,4 +1,4 @@
-import {hiragana, katakana, romaji} from "/script/japanese.js"
+import {hiragana, katakana, romaji} from "/script/util/japanese.js"
 
 console.log("Hiragana object:");
 console.log(hiragana);

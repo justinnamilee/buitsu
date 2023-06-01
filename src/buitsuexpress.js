@@ -185,8 +185,8 @@ export default class buitsuexpress {
             console.log(req.params.name);
           }
 
-          if (req.params && "name" in req.params && req.params.name in this.c.view.game) {
-            res.render(this.c.view.game[req.params.name], { data: req.user, meta: this.c, game: req.params.name });
+          if (req.params && "name" in req.params) {
+            res.render(this.c.view.page.game, { data: req.user, meta: this.c, game: req.params.name });
           }
           else {
             res.redirect(this.c.route.games);
