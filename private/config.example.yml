@@ -1,0 +1,137 @@
+---
+database:
+  map:
+    create:
+      - name
+      - id
+      - email
+    find:
+      - id
+    info:
+      - rowid
+    update:
+      - display
+      - rowid
+  path: "./private/buitsu.db"
+  query:
+    user:
+      create: >
+        INSERT INTO
+          user (name, id, email)
+        VALUES
+          (?, ?, ?)
+      find: >
+        SELECT
+          rowid
+        FROM
+          user
+        WHERE
+          id = ?
+      info: >
+        SELECT
+          *
+        FROM
+          user
+        WHERE
+          rowid = ?
+      update: >
+        UPDATE
+          user
+        SET
+          display = ?
+        WHERE
+          rowid = ?
+    setup:
+      game: >
+        CREATE TABLE IF NOT EXISTS game
+        (
+          rowid INTEGER NOT NULL,
+          name TEXT NOT NULL,
+          desc TEXT,
+          PRIMARY KEY(rowid)
+        )
+      index: >
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_user_id ON user(id)
+      user: >
+        CREATE TABLE IF NOT EXISTS user
+        (
+          rowid INTEGER NOT NULL,
+          name TEXT NOT NULL,
+          id INTEGER NOT NULL,
+          email TEXT NOT NULL,
+          display TEXT DEFAULT '',
+          PRIMARY KEY(rowid)
+        )
+      score: >
+        CREATE TABLE IF NOT EXISTS score
+        (
+          rowid INTEGER NOT NULL,
+          user_id INTEGER NOT NULL,
+          game_id INTEGER NOT NULL,
+          score INTEGER DEFAULT 0,
+          CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user(rowid),
+          CONSTRAINT fk_game FOREIGN KEY (game_id) REFERENCES game(rowid)
+        )
+  ui:
+    close: "DB closed."
+    closed: "DB already closed."
+    create: "Created new user."
+    find: "Found user: "
+    open: "DB opened."
+    opened: "DB already opened."
+    recursionFail: "Max recursion reached."
+    setup: "DB setup complete."
+    updateFail: "Failed to update user: "
+    updateSuccess: "Updated user."
+express:
+  ejs:
+    css:
+      bootstrap:
+        href: "https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity: "sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      fontawesome:
+        href: "https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+        integrity: "sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm"
+    js:
+      bootstrap:
+        href: "https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity: "sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+      jquery:
+        href: "https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity: "sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+  game:
+    - flashcard1
+  grace: 30
+  port: 3111
+  route:
+    about: "/about"
+    game: "/game/:name"
+    gameRaw: "/game/"
+    games: "/games"
+    loginFailed: "/login/failed"
+    loginFacebook: "/login/facebook"
+    loginFacebookCallback: "/login/facebook/return"
+    loginGoogle: "/login/google"
+    loginGoogleCallback: "/login/google/return"
+    logout: "/logout"
+    logoutCallback: "/logout/return"
+    root: "/"
+  startup: 2
+  static: public
+  ui:
+    loginFailed: "Failed to log in with selected OAuth2.0 method, this shouldn't happen."
+    normalizeFailed: "Failed to normalize object: "
+    shutdown: "Server terminating..."
+    shutdownFail: "Server terminated abnormally."
+    shutdownSuccess: "Server terminated successfull."
+    startup: "Server open, port: "
+  url:
+    loginFacebookCallback: "https://v2.taiz.me/login/facebook/return"
+    loginGoogleCallback: "https://v2.taiz.me/login/google/return"
+  view:
+    page:
+      about: "page/about"
+      games: "page/games"
+      index: "page/index"
+      game:  "page/game"
+    
